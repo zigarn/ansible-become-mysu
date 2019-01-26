@@ -1,0 +1,33 @@
+---
+
+- name: Wrap sudo restriction
+  hosts: localhost
+  roles:
+    - become
+
+- name: Test mysu become
+  hosts: localhost
+  gather_facts: yes
+  tasks:
+    - name: Do no become
+      command: id
+      register: no_become
+    - debug:
+        var: no_become
+
+    - name: Default become_user
+      command: id
+      become: yes
+      ignore_errors: yes
+      register: default_become
+    - debug:
+        var: default_become
+
+    - name: Other become_user
+      command: id
+      become: yes
+      become_user: "{{ lookup('env', 'USER') }}"
+      ignore_errors: yes
+      register: user_become
+    - debug:
+        var: user_become

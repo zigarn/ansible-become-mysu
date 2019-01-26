@@ -1,0 +1,26 @@
+---
+
+- block:
+
+    - name: Create sudo wrapper
+      template:
+        src: mysu.sh
+        dest: "{{ mysu_become_exe }}"
+        mode: 0755
+      become: no
+      delegate_to: "{{ item }}"
+      with_inventory_hostnames: "{{ groups.all }}"
+      run_once: yes
+
+    - name: Force use of specific become method
+      set_fact:
+        ansible_become_method: su
+        ansible_become_exe: "{{ mysu_become_exe }}"
+      delegate_to: "{{ item }}"
+      delegate_facts: yes
+      with_inventory_hostnames: "{{ groups.all }}"
+      run_once: yes
+
+  tags:
+    - always
+    - mysu
