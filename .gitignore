@@ -1,0 +1,8 @@
+# Ansible
+*.retry
+
+# Vi
+.*.swp
+
+# Python
+*.pyc
